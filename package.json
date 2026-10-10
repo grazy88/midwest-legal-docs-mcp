@@ -1,0 +1,25 @@
+{
+  "name": "mld-mcp-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/express": "^2.0.2",
+    "@modelcontextprotocol/node": "^2.1.1",
+    "@modelcontextprotocol/server": "^2.3.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "express": "^5.3.0",
+    "typescript": "^7.0.2",
+    "zod": "^4.6.5"
+  },
+  "type": "module",
+  "mcpName": "io.github.grazy88/midwest-legal-docs"
+}
