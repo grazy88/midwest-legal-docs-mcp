@@ -136,7 +136,21 @@ const app = createMcpExpressApp({
 
 app.get('/health', (_req, res) => res.json({ ok: true, service: 'mld-mcp-server' }));
 
+// Bearer-token auth for the /mcp endpoint. Token comes from the
+// MCP_AUTH_TOKEN env var (set on Render). Requests without a matching
+// Authorization: Bearer <token> header are rejected. This keeps the
+// publicly-listed endpoint from exposing order lookups to strangers.
+const MCP_AUTH_TOKEN = process.env.MCP_AUTH_TOKEN ?? '';
+
 app.all('/mcp', async (req, res) => {
+  if (MCP_AUTH_TOKEN) {
+    const auth = String(req.headers.authorization || '');
+    const provided = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+    if (!provided || provided !== MCP_AUTH_TOKEN) {
+      res.status(401).json({ error: 'Unauthorized: valid bearer token required.' });
+      return;
+    }
+  }
   const server = createServer(); // fresh per request (stateless)
   const transport = new NodeStreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   await server.connect(transport);
